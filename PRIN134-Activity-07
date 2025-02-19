@@ -1,0 +1,109 @@
+// Emoji 
+const TROPHY = String.fromCodePoint(0x1F3C6);
+const BASKETBALL = String.fromCodePoint(0x1F3C0);
+const FIRE = String.fromCodePoint(0x1F525);
+
+
+class Player {
+    constructor(name, team) {
+        this.name = name;
+        this.team = team;
+        this.score = 0;
+    }
+}
+
+class BasketballGame {
+    constructor(players, attempts) {
+        this.players = players;
+        this.attempts = attempts;
+        this.rankings = [];
+    }
+
+    
+    calculateSuccessRate() {
+        return Math.random() < 0.5; 
+    }
+
+    
+    simulateShots(player) {
+        let successfulShots = 0;
+        for (let i = 0; i < this.attempts; i++) {
+            if (this.calculateSuccessRate()) {
+                successfulShots++;
+                player.score++;
+            }
+        }
+        return successfulShots;
+    }
+
+    
+    updateRankings() {
+        this.rankings = [...this.players].sort((a, b) => b.score - a.score);
+    }
+
+    
+    checkForTie() {
+        if (this.rankings.length < 2) return false;
+        return this.rankings[0].score === this.rankings[1].score;
+    }
+
+    
+    tiebreaker() {
+        const tiedScore = this.rankings[0].score;
+        const tiedPlayers = this.rankings.filter(player => player.score === tiedScore);
+        
+        console.log(`${FIRE} Tiebreaker needed between: ${tiedPlayers.map(p => p.name).join(', ')}`);
+        
+        
+        tiedPlayers.forEach(player => player.score = 0);
+        
+       
+        console.log(`\n${BASKETBALL} Round 2 Begins!`);
+        tiedPlayers.forEach(player => {
+            const shots = this.simulateShots(player);
+            console.log(`${player.name} scored ${shots} successful shots.`);
+        });
+    }
+
+    //rankings
+    displayRankings() {
+        console.log(`\n${TROPHY} Rankings after this round:`);
+        this.rankings.forEach((player, index) => {
+            console.log(`${index + 1}. ${player.name} - ${player.score} points`);
+        });
+    }
+
+
+    play() {
+        console.log(`${TROPHY} Rankings after this round:`);
+        this.players.forEach(player => {
+            const shots = this.simulateShots(player);
+            console.log(`${player.name} scored ${shots} successful shots.`);
+        });
+
+        this.updateRankings();
+        this.displayRankings();
+
+       
+        if (this.checkForTie()) {
+            this.tiebreaker();
+            this.updateRankings();
+            this.displayRankings();
+        }
+
+        // winner
+        console.log(`\n${TROPHY} The champion is ${this.rankings[0].name} with ${this.rankings[0].score} points!`);
+    }
+}
+
+//players
+const players = [
+    new Player("James", "Lakers"),
+    new Player("Curry", "Warriors"),
+    new Player("Jordan", "Bulls"),
+    new Player("Bryant", "Lakers"),
+    new Player("Durant", "Suns")
+];
+
+const game = new BasketballGame(players, 5);
+game.play();
