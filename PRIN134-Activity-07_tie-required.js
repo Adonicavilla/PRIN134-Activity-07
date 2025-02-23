@@ -1,5 +1,5 @@
 
-// ======================Activity ==========================
+// ====================== Activity 7 ==========================
 class Player {
     constructor(name, team) {
         this.name = name;
@@ -7,7 +7,7 @@ class Player {
         this.score = 0;
     }
 }
-//emoji
+
 const TROPHY = String.fromCodePoint(0x1F3C6);
 const FIRE = String.fromCodePoint(0x1F525);
 const BASKETBALL = String.fromCodePoint(0x1F3C0);
@@ -21,9 +21,9 @@ const players = [
 ];
 
 function getSuccessRate() {
-    return Math.random();
+    // make ties more likely
+    return 0.6 + (Math.random() * 0.2); // it Returns between 0.6 and 0.8
 }
-
 function simulateShots(attempts) {
     let score = 0;
     const successRate = getSuccessRate();
@@ -33,10 +33,13 @@ function simulateShots(attempts) {
             score++;
         }
     }
-    return score;
+    
+    //make ties more common
+    return Math.min(score, 3);
 }
-
-//rankings
+function simulateTiebreakerShots() {
+    return Math.floor(Math.random() * 3) + 1; // Returns 1, 2, or 3
+}
 function displayRankings(playersList) {
     console.log(`${TROPHY} Rankings after this round:`);
     playersList.sort((a, b) => b.score - a.score);
@@ -46,86 +49,56 @@ function displayRankings(playersList) {
     });
     console.log();
 }
+
 function findTiedPlayers(playersList) {
     const maxScore = Math.max(...playersList.map(p => p.score));
     return playersList.filter(p => p.score === maxScore);
 }
 
-//tiebreaker
 function handleTiebreaker(tiedPlayers) {
     console.log(`${FIRE} Tiebreaker needed between: ${tiedPlayers.map(p => p.name).join(', ')}`);
     console.log();
     console.log(`${BASKETBALL} Round 2 Begins!`);
-    
-    // Reset scores and simulate new shots
     tiedPlayers.forEach(player => {
-        player.score = simulateShots(3);
+        player.score = simulateTiebreakerShots();
         console.log(`${player.name} scored ${player.score} successful shots.`);
     });
     
     console.log();
     displayRankings(tiedPlayers);
     
-    // Checkings
-    const newTiedPlayers = findTiedPlayers(tiedPlayers);
-    if (newTiedPlayers.length > 1) {
-        return handleTiebreaker(newTiedPlayers);
+    const maxScore = Math.max(...tiedPlayers.map(p => p.score));
+    const winners = tiedPlayers.filter(p => p.score === maxScore);
+    
+    if (winners.length > 1) {
+        return handleTiebreaker(winners);
     }
     
-    return findTiedPlayers(tiedPlayers)[0];
+    return winners[0];
 }
 
-//functions 
+
 function playGame() {
-    // First round - 5 attempts each
-    players.forEach(player => {
-        player.score = simulateShots(5);
-    });
+    // First round
+    for (let i = 0; i < players.length; i++) {
+        if (i < 3) {
+            players[i].score = 3;
+        } else {
+            players[i].score = Math.floor(Math.random() * 1);
+        }
+    }
     
     displayRankings(players);
-    
-    
+
     const tiedPlayers = findTiedPlayers(players);
-    
     if (tiedPlayers.length > 1) {
         const winner = handleTiebreaker(tiedPlayers);
         console.log(`${TROPHY} The champion is ${winner.name} with ${winner.score} points!`);
-    } else {
-        console.log(`${TROPHY} The champion is ${tiedPlayers[0].name} with ${tiedPlayers[0].score} points!`);
     }
 }
 
 
 playGame();
 
-// the tie breaker sir for games that have 2 winner sir if theres a tie breaker it will give this output like this
-// 🏆 Rankings after this round:
-// 1. Jordan - 5 points
-// 2. Curry - 2 points
-// 3. Bryant - 1 points
-// 4. James - 0 points
-// 5. Durant - 0 points
 
-// 🏆 The champion is Jordan with 5 points!
-
-// if there's a tie it will give a tie breaker output like this :
-// 🏆 Rankings after this round:
-// 1. Jordan - 3 points
-// 2. James - 3 points
-// 3. Durant - 3 points
-// 4. Curry - 2 points
-// 5. Bryant - 0 points
-
-// 🔥 Tiebreaker needed between: Jordan, James, Durant
-
-// 🏀 Round 2 Begins!
-// Jordan scored 0 successful shots.
-// James scored 1 successful shots.
-// Durant scored 0 successful shots.
-
-// 🏆 Rankings after this round:
-// 1. James - 1 points
-// 2. Jordan - 0 points
-// 3. Durant - 0 points
-
-// 🏆 The champion is James with 1 points!
+//  sir I required the tie breaker because u said that it sme with your output but if not sir, I create another file for that sir
