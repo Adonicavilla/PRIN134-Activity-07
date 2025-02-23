@@ -1,3 +1,5 @@
+
+// ====================== Activity 7 ==========================
 class Player {
     constructor(name, team) {
         this.name = name;
