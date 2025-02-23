@@ -1,9 +1,3 @@
-// Emoji constants
-const TROPHY = String.fromCodePoint(0x1F3C6);
-const FIRE = String.fromCodePoint(0x1F525);
-const BASKETBALL = String.fromCodePoint(0x1F3C0);
-
-// Player class definition
 class Player {
     constructor(name, team) {
         this.name = name;
@@ -11,73 +5,125 @@ class Player {
         this.score = 0;
     }
 }
+//emoji
+const TROPHY = String.fromCodePoint(0x1F3C6);
+const FIRE = String.fromCodePoint(0x1F525);
+const BASKETBALL = String.fromCodePoint(0x1F3C0);
 
-// Function to calculate success rate
-function calculateSuccessRate() {
-    return Math.random() < 0.5;
-}
-
-// Function to simulate shots
-function simulateShots(attempts) {
-    let successfulShots = 0;
-    for (let i = 0; i < attempts; i++) {
-        if (calculateSuccessRate()) {
-            successfulShots++;
-        }
-    }
-    return successfulShots;
-}
-
-// Create and initialize players
 const players = [
-    new Player("James", "Lakers"),
     new Player("Curry", "Warriors"),
     new Player("Jordan", "Bulls"),
     new Player("Bryant", "Lakers"),
+    new Player("James", "Lakers"),
     new Player("Durant", "Suns")
 ];
 
-// Function to display rankings
-function displayRankings(players) {
+function getSuccessRate() {
+    return Math.random();
+}
+
+function simulateShots(attempts) {
+    let score = 0;
+    const successRate = getSuccessRate();
+    
+    for(let i = 0; i < attempts; i++) {
+        if(Math.random() < successRate) {
+            score++;
+        }
+    }
+    return score;
+}
+
+//rankings
+function displayRankings(playersList) {
     console.log(`${TROPHY} Rankings after this round:`);
-    players.sort((a, b) => b.score - a.score);
-    players.forEach((player, index) => {
+    playersList.sort((a, b) => b.score - a.score);
+    
+    playersList.forEach((player, index) => {
         console.log(`${index + 1}. ${player.name} - ${player.score} points`);
     });
+    console.log();
+}
+function findTiedPlayers(playersList) {
+    const maxScore = Math.max(...playersList.map(p => p.score));
+    return playersList.filter(p => p.score === maxScore);
 }
 
-// First round - simulate shots
-players.forEach(player => {
-    const shots = simulateShots(5); // 5 attempts per player
-    player.score = shots;
-});
-
-// Display first round rankings
-displayRankings(players);
-
-// Check for tie
-const tiedPlayers = players.filter(player => player.score === players[0].score);
-if (tiedPlayers.length > 1) {
-    console.log(`\n${FIRE} Tiebreaker needed between: ${tiedPlayers.map(p => p.name).join(', ')}`);
+//tiebreaker
+function handleTiebreaker(tiedPlayers) {
+    console.log(`${FIRE} Tiebreaker needed between: ${tiedPlayers.map(p => p.name).join(', ')}`);
+    console.log();
+    console.log(`${BASKETBALL} Round 2 Begins!`);
     
-    // Round 2
-    console.log(`\n${BASKETBALL} Round 2 Begins!`);
-    
-    // Reset scores for tied players
+    // Reset scores and simulate new shots
     tiedPlayers.forEach(player => {
-        player.score = 0;
-        const shots = simulateShots(3); // 3 attempts for tiebreaker
-        player.score = shots;
-        console.log(`${player.name} scored ${shots} successful shots.`);
+        player.score = simulateShots(3);
+        console.log(`${player.name} scored ${player.score} successful shots.`);
     });
     
-    // Display final rankings
-    console.log(`\n${TROPHY} Rankings after this round:`);
-    tiedPlayers.sort((a, b) => b.score - a.score);
-    tiedPlayers.forEach((player, index) => {
-        console.log(`${index + 1}. ${player.name} - ${player.score} points`);
-    });
+    console.log();
+    displayRankings(tiedPlayers);
     
-    // Announce winner
-    console.log(`\n${TROPHY} The champion is ${tiedPlayers[0].name} with ${tiedPlayers[0].score} points!`);
+    // Checkings
+    const newTiedPlayers = findTiedPlayers(tiedPlayers);
+    if (newTiedPlayers.length > 1) {
+        return handleTiebreaker(newTiedPlayers);
+    }
+    
+    return findTiedPlayers(tiedPlayers)[0];
 }
+
+//functions 
+function playGame() {
+    // First round - 5 attempts each
+    players.forEach(player => {
+        player.score = simulateShots(5);
+    });
+    
+    displayRankings(players);
+    
+    
+    const tiedPlayers = findTiedPlayers(players);
+    
+    if (tiedPlayers.length > 1) {
+        const winner = handleTiebreaker(tiedPlayers);
+        console.log(`${TROPHY} The champion is ${winner.name} with ${winner.score} points!`);
+    } else {
+        console.log(`${TROPHY} The champion is ${tiedPlayers[0].name} with ${tiedPlayers[0].score} points!`);
+    }
+}
+
+
+playGame();
+
+// the tie breaker sir for games that have 2 winner sir if theres a tie breaker it will give this output like this
+// 🏆 Rankings after this round:
+// 1. Jordan - 5 points
+// 2. Curry - 2 points
+// 3. Bryant - 1 points
+// 4. James - 0 points
+// 5. Durant - 0 points
+
+// 🏆 The champion is Jordan with 5 points!
+
+// if there's a tie it will give a tie breaker output like this :
+// 🏆 Rankings after this round:
+// 1. Jordan - 3 points
+// 2. James - 3 points
+// 3. Durant - 3 points
+// 4. Curry - 2 points
+// 5. Bryant - 0 points
+
+// 🔥 Tiebreaker needed between: Jordan, James, Durant
+
+// 🏀 Round 2 Begins!
+// Jordan scored 0 successful shots.
+// James scored 1 successful shots.
+// Durant scored 0 successful shots.
+
+// 🏆 Rankings after this round:
+// 1. James - 1 points
+// 2. Jordan - 0 points
+// 3. Durant - 0 points
+
+// 🏆 The champion is James with 1 points!
