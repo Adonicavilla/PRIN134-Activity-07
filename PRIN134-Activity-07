@@ -14,7 +14,7 @@ class Player {
 
 // Function to calculate success rate
 function calculateSuccessRate() {
-    return Math.random() < 0.3;
+    return Math.random() < 0.5;
 }
 
 // Function to simulate shots
