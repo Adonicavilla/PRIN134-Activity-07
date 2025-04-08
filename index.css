@@ -1,0 +1,128 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    color: #333;
+}
+.container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+h1 {
+    color: #d35400;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.add-player {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #2980b9;
+}
+button.reset {
+    background-color: #e74c3c;
+}
+button.reset:hover {
+    background-color: #c0392b;
+}
+button.start {
+    background-color: #2ecc71;
+}
+button.start:hover {
+    background-color: #27ae60;
+}
+.players-list {
+    margin-bottom: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+th {
+    background-color: #f2f2f2;
+}
+tr:hover {
+    background-color: #f5f5f5;
+}
+.game-log {
+    margin-top: 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    height: 300px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+}
+.winner {
+    background-color: #fdf2d0;
+    font-weight: bold;
+}
+.tied {
+    background-color: #d5f5e3;
+}
+.log-item {
+    margin-bottom: 8px;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+.trophy {
+    color: gold;
+}
+.fire {
+    color: orangered;
+}
+.basketball {
+    color: orange;
+}
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+.player-actions {
+    display: flex;
+    gap: 5px;
+}
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 2px 8px;
+}
+.delete-btn:hover {
+    background-color: #c0392b;
+}
