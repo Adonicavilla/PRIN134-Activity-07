@@ -1,9 +1,9 @@
 const TROPHY = "🏆";
 const FIRE = "🔥";
 const BASKETBALL = "🏀";
-        class Player {
-            constructor(name, team) {
-                this.name = name;
+class Player {
+    constructor(name, team) {
+        this.name = name;
                 this.team = team;
                 this.score = 0;
             }
